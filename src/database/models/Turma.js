@@ -29,5 +29,14 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   }
 
-  return sequelize.define('Turma', tableDefinitions, tableConfiguration);
+  const TurmaModel = sequelize.define('Turma', tableDefinitions, tableConfiguration);
+
+  TurmaModel.associate = (models) => {
+    TurmaModel.belongsTo(models.Professor, {
+      as: 'professor',
+      foreignKey: 'professorId'
+    });
+  };
+
+  return TurmaModel;
 }

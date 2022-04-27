@@ -17,5 +17,14 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   }
 
-  return sequelize.define('Professor', tableDefinitions, tableConfiguration);
+  const ProfessorModel = sequelize.define('Professor', tableDefinitions, tableConfiguration);
+
+  ProfessorModel.associate = (models) => {
+    ProfessorModel.hasMany(models.Turma, {
+      as: 'turmas',
+      foreignKey: 'professorId'
+    });
+  };
+
+  return ProfessorModel
 }
