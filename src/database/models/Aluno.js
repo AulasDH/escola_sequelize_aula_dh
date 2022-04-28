@@ -21,5 +21,16 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   }
 
-  return sequelize.define('Aluno', tableDefinitions, tableConfiguration);
+  const AlunoModel = sequelize.define('Aluno', tableDefinitions, tableConfiguration);
+
+  AlunoModel.associate = (models) => {
+    AlunoModel.belongsToMany(models.Turma, {
+      as: 'turmas',
+      foreignKey: 'alunoId',
+      through: models.AlunoTurma,
+      otherKey: 'turmaId'
+    });
+  };
+
+  return AlunoModel;
 }

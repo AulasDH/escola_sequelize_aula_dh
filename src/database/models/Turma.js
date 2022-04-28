@@ -36,6 +36,18 @@ module.exports = (sequelize, DataTypes) => {
       as: 'professor',
       foreignKey: 'professorId'
     });
+
+    TurmaModel.belongsTo(models.Curso, {
+      as: 'curso',
+      foreignKey: 'cursoId'
+    });
+
+    TurmaModel.belongsToMany(models.Aluno, {
+      as: 'alunos',
+      foreignKey: 'turmaId',
+      through: models.AlunoTurma,
+      otherKey: 'alunoId'
+    });
   };
 
   return TurmaModel;

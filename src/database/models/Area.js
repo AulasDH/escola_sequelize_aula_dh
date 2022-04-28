@@ -14,5 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     timestamps: false,
   }
 
-  return sequelize.define('Area', tableDefinitions, tableConfiguration);
+  const AreaModel = sequelize.define('Area', tableDefinitions, tableConfiguration);
+
+  AreaModel.associate = (models) => {
+    AreaModel.hasMany(models.Curso, {
+      as: 'cursos',
+      foreignKey: 'areaId'
+    });
+  };
+
+  return AreaModel;
 }
