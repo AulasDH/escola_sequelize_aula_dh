@@ -23,7 +23,9 @@ const alunoController = {
 
       await Promise.all(
         alunosTurmas.map((alunoTurma) => {
+          alunoTurma.numeroFaltas += 1;
 
+          return alunoTurma.save();
         })
       );
 
