@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       field: 'turma_id'
     },
+    numeroFaltas: {
+      type: DataTypes.INTEGER,
+      field: 'numero_faltas'
+    },
   }
 
   const tableConfiguration = {

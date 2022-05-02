@@ -2,7 +2,7 @@ const express = require('express');
 const professorRoutes = require('./routes/professor.routes');
 const cursoRoutes = require('./routes/curso.routes');
 const alunoRoutes = require('./routes/aluno.routes');
-const { sequelize } = require('./database/models/');
+const { sequelize, Aluno } = require('./database/models/');
 
 const app = express();
 
@@ -11,45 +11,61 @@ app.use('/cursos', cursoRoutes);
 app.use('/alunos', alunoRoutes);
 
 app.get('/queries', async (request, response) => {
-  // [?, ?]
-  // [nome, sobrenome]
 
-  // { nome: nome, sobrenome: sobrenome }
-  // { nome, sobrenome }
+  /**
+   * @description ativida 1 letra 'A' e 'B' 
+    const alunos = await sequelize.query('SELECT * FROM alunos WHERE nome LIKE :campo OR sobrenome LIKE :campo;',
+      {
+        replacements: { campo: `%${campo}%` },
+        type: sequelize.QueryTypes.SELECT
+      }
+    );
+  */
 
-  // podemos usar ?
+  /** 
+    * @description Atividade 1 letra C
+    const alunos = await sequelize.query('SELECT * FROM alunos WHERE ano_matricula = :anoMatricula;',
+      {
+        replacements: { anoMatricula: campo },
+        type: sequelize.QueryTypes.SELECT
+      }
+    );
+  */
 
-  //   const alunos = await sequelize.query('SELECT * FROM alunos WHERE nome = ? AND sobrenome = ?',
-  //   {
-  //     replacements: [nome, sobrenome],
-  //     type: sequelize.QueryTypes.SELECT
-  //   }
-  // );
+  /**
+   * @description Atividade 1 letra D
+      const alunos = await sequelize.query(`
+        SELECT alunos.*, alunos_turmas.numero_faltas as numeroFaltas
+        FROM alunos 
+        INNER JOIN alunos_turmas ON alunos.id = alunos_turmas.aluno_id 
+        WHERE alunos_turmas.numero_faltas > ?;
+      `,
+        {
+          replacements: [campo],
+          type: sequelize.QueryTypes.SELECT,
+          mapToModel: true,
+          model: Aluno,
+        }
+      );
+   */
 
-  // podemos usar bind $
-  //   const alunos = await sequelize.query('SELECT * FROM alunos WHERE nome = $1 AND sobrenome = $2',
-  //   {
-  //     bind: [nome, sobrenome],
-  //     type: sequelize.QueryTypes.SELECT
-  //   }
-  // );
+  const { campo } = request.query;
 
-  // podemos usar chave :nome
-  // const alunos = await sequelize.query('SELECT * FROM alunos WHERE nome = :nome AND sobrenome = :sobrenome',
-  //   {
-  //     replacements: { nome, sobrenome },
-  //     type: sequelize.QueryTypes.SELECT
-  //   }
-  // );
-
-  const { nome, sobrenome } = request.query;
-
-  const alunos = await sequelize.query('SELECT * FROM alunos WHERE nome = $1 AND sobrenome = $2',
+  const alunos = await sequelize.query(`
+    SELECT alunos.*, alunos_turmas.numero_faltas as numeroFaltas
+    FROM alunos 
+    INNER JOIN alunos_turmas ON alunos.id = alunos_turmas.aluno_id 
+    WHERE alunos_turmas.numero_faltas > ?;
+  `,
     {
-      bind: [nome, sobrenome],
-      type: sequelize.QueryTypes.SELECT
+      replacements: [campo],
+      type: sequelize.QueryTypes.SELECT,
+      mapToModel: true,
+      model: Aluno,
     }
   );
+
+
 
   response.json(alunos)
 })
