@@ -20,17 +20,5 @@ module.exports = (sequelize, DataTypes) => {
 
   const CursoModel = sequelize.define('Curso', tableDefinitions, tableConfiguration);
 
-  CursoModel.associate = (models) => {
-    CursoModel.belongsTo(models.Area, {
-      as: 'area',
-      foreignKey: 'areaId'
-    });
-
-    CursoModel.hasMany(models.Turma, {
-      as: 'turmas',
-      foreignKey: 'cursoId'
-    });
-  };
-
   return CursoModel;
 }

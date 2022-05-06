@@ -19,12 +19,5 @@ module.exports = (sequelize, DataTypes) => {
 
   const ProfessorModel = sequelize.define('Professor', tableDefinitions, tableConfiguration);
 
-  ProfessorModel.associate = (models) => {
-    ProfessorModel.hasMany(models.Turma, {
-      as: 'turmas',
-      foreignKey: 'professorId'
-    });
-  };
-
   return ProfessorModel
 }

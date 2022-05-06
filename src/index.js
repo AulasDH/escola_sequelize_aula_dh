@@ -2,7 +2,7 @@ const express = require('express');
 const professorRoutes = require('./routes/professor.routes');
 const cursoRoutes = require('./routes/curso.routes');
 const alunoRoutes = require('./routes/aluno.routes');
-const { sequelize, Aluno } = require('./database/models/');
+const { sequelize, Curso } = require('./database/models/');
 
 const app = express();
 
@@ -34,38 +34,36 @@ app.get('/queries', async (request, response) => {
 
   /**
    * @description Atividade 1 letra D
-      const alunos = await sequelize.query(`
-        SELECT alunos.*, alunos_turmas.numero_faltas as numeroFaltas
-        FROM alunos 
-        INNER JOIN alunos_turmas ON alunos.id = alunos_turmas.aluno_id 
-        WHERE alunos_turmas.numero_faltas > ?;
-      `,
-        {
-          replacements: [campo],
-          type: sequelize.QueryTypes.SELECT,
-          mapToModel: true,
-          model: Aluno,
-        }
-      );
-   */
+
+    const alunos = await sequelize.query(`
+      SELECT alunos.*, alunos_turmas.numero_faltas as numeroFaltas
+      FROM alunos 
+      INNER JOIN alunos_turmas ON alunos.id = alunos_turmas.aluno_id 
+      WHERE alunos_turmas.numero_faltas > ?;
+    `,
+      {
+        replacements: [campo],
+        type: sequelize.QueryTypes.SELECT,
+        mapToModel: true,
+        model: Aluno,
+      }
+    );
+  */
 
   const { campo } = request.query;
 
   const alunos = await sequelize.query(`
-    SELECT alunos.*, alunos_turmas.numero_faltas as numeroFaltas
-    FROM alunos 
-    INNER JOIN alunos_turmas ON alunos.id = alunos_turmas.aluno_id 
-    WHERE alunos_turmas.numero_faltas > ?;
+    SELECT * FROM cursos
+    INNER JOIN areas ON cursos.area_id = areas.id
+    WHERE areas.tipo = $1;
   `,
     {
-      replacements: [campo],
+      bind: [campo],
       type: sequelize.QueryTypes.SELECT,
       mapToModel: true,
-      model: Aluno,
+      model: Curso,
     }
   );
-
-
 
   response.json(alunos)
 })

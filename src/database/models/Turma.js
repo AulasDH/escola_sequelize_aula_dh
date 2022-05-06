@@ -31,24 +31,5 @@ module.exports = (sequelize, DataTypes) => {
 
   const TurmaModel = sequelize.define('Turma', tableDefinitions, tableConfiguration);
 
-  TurmaModel.associate = (models) => {
-    TurmaModel.belongsTo(models.Professor, {
-      as: 'professor',
-      foreignKey: 'professorId'
-    });
-
-    TurmaModel.belongsTo(models.Curso, {
-      as: 'curso',
-      foreignKey: 'cursoId'
-    });
-
-    TurmaModel.belongsToMany(models.Aluno, {
-      as: 'alunos',
-      foreignKey: 'turmaId',
-      through: models.AlunoTurma,
-      otherKey: 'alunoId'
-    });
-  };
-
   return TurmaModel;
 }
